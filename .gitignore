@@ -1,0 +1,10 @@
+
+venv/
+__pycache__/
+*.pyc
+.env
+profitlens.db
+instance/
+.vscode/
+static/uploads/*
+!static/uploads/.gitkeep

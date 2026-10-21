@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfitLens</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>My Shop</h1>
+    <a href="/inventory"> Go to inventory </a>
+    <p>Making my life easier</p>
+
+
+<h2>Find Suppliers</h2>
+
+<a
+    href="https://www.aliexpress.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    <button type="button">
+        Search on AliExpress
+    </button>
+</a>
+
+
+<h2>Compare AliExpress Suppliers</h2>
+
+<form action="/compare" method="POST">
+
+    {% for i in range(1, 4) %}
+
+        <h3>Supplier {{ i }}</h3>
+
+        <label>AliExpress Product Link</label>
+        <input
+            type="url"
+            name="link{{ i }}"
+            placeholder="https://www.aliexpress.com/item/..."
+        >
+
+        <label>Product Price (USD)</label>
+        <input
+            type="number"
+            name="price{{ i }}"
+            step="0.01"
+            min="0"
+        >
+
+        <label>Shipping Cost (USD)</label>
+        <input
+            type="number"
+            name="shipping{{ i }}"
+            step="0.01"
+            min="0"
+            value="0"
+        >
+
+    {% endfor %}
+
+    <button type="submit">
+        Compare Prices
+    </button>
+
+</form>
+
+    <h2>Product Pricing Calculator</h2>
+
+    <form id="product-form" action="/calculate" method="POST" enctype="multipart/form-data">
+
+        <label>Product Image</label>
+
+        <input type="file" name="product_image" accept="image/jpeg,image/png,image/webp">
+
+        
+<label>AliExpress Product Link</label>
+
+<input
+    type="url"
+    name="supplier_link"
+    value="{{ selected_link | default('', true) }}"
+    readonly
+    required
+>
+
+        <label>AliExpress Price (USD)</label>
+       <input
+    type="number"
+    name="price"
+    step="0.01"
+    value="{{ selected_price | default('', true) }}"
+    required
+>
+
+        <label>Exchange Rate (USD to BDT)</label>
+        <input type="number" name="rate" step="0.01" min="0.01" required>
+
+        <label>Shipping Cost (BDT)</label>
+        <label>AliExpress Shipping (USD)</label>
+
+<input
+    type="number"
+    name="supplier_shipping"
+    step="0.01"
+    value="{{ selected_shipping | default('', true) }}"
+    readonly
+>
+
+        <label>Other Costs (BDT)</label>
+        <input type="number" name="other_costs" step="0.01" min="0" value="0" required>
+
+        <label>Desired Markup (%)</label>
+        <input type="number" name="profit" step="0.01" min="0" required>
+
+        <button type="submit">Calculate Price</button>
+    </form>
+    {% if result %}
+    <div class="result">
+        
+<p>
+    Product:
+    <a href="{{ result.name }}"
+       target="_blank"
+       rel="noopener noreferrer">
+        View Product
+    </a>
+</p>
+
+        <p>Product Cost:
+            ৳{{ result.product_cost }}
+        </p>
+
+        <p>Total Cost:
+            ৳{{ result.total_cost }}
+        </p>
+
+        <p>Profit:
+            ৳{{ result.profit }}
+        </p>
+
+        <h3>Selling Price:
+            ৳{{ result.selling_price }}
+        </h3>
+    </div>
+    {% endif %}
+    <script>
+        const searchForm = document.getElementById("image-search-form");
+
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            window.open(
+                "https://www.aliexpress.com/",
+                "_blank"
+            );
+        });
+    </script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Supplier Comparison - ProfitLens</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Supplier Comparison Results</h1>
+
+    <table border="1">
+        <tr>
+            <th>Supplier</th>
+            <th>Product Price</th>
+            <th>Shipping</th>
+            <th>Total Cost</th>
+            <th>Product Link</th>
+        </tr>
+
+        {% for supplier in suppliers %}
+        <tr>
+            <td>Supplier {{ loop.index }}</td>
+            <td>${{ supplier.price }}</td>
+            <td>${{ supplier.shipping }}</td>
+            <td>${{ supplier.total }}</td>
+            <td>
+                <a href="{{ supplier.link }}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    View Product
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Cheapest Supplier</h2>
+
+    <p>
+        Lowest total cost:
+        <strong>${{ cheapest.total }}</strong>
+    </p>
+
+    <p>
+        <a href="{{ cheapest.link }}"
+           target="_blank"
+           rel="noopener noreferrer">
+            Open Cheapest Product
+        </a>
+    </p>
+
+<form action="/" method="GET">
+
+    <input
+        type="hidden"
+        name="price"
+        value="{{ cheapest.price }}"
+    >
+    <input
+    type="hidden"
+    name="supplier_link"
+    value="{{ cheapest.link }}"
+>
+
+    <input
+        type="hidden"
+        name="supplier_shipping"
+        value="{{ cheapest.shipping }}"
+    >
+
+    <button type="submit">
+        Calculate Selling Price
+    </button>
+
+</form>
+
+    <a href="/">Back to Homepage</a>
+
+</body>
+</html>
