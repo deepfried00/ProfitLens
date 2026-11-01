@@ -1,96 +1,368 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #f8f2ff;
+    --paper: #fffdf8;
+    --purple: #9b79d1;
+    --purple-dark: #5e448a;
+    --pink: #f7bfd9;
+    --mint: #c6eddd;
+    --text: #392e50;
+    --border: #594475;
+    --shadow: 5px 5px 0px #d4c2e9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f6fa;
-    color: #222;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(#dfcfee 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    color: var(--text);
+    max-width: 1050px;
+    margin: 35px auto;
+    padding: 24px;
+    line-height: 1.7;
+    animation: pageEnter 0.65s ease-out;
+}
+
+/* Pixel-style headings */
+
+h1,
+h2,
+h3 {
+    font-family: 'Press Start 2P', monospace;
+    line-height: 1.8;
 }
 
 h1 {
-    color: #3157c9;
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--purple-dark);
+    text-shadow: 3px 3px 0px #e4d2ff;
+    margin-bottom: 25px;
+}
+
+h2 {
+    font-size: 15px;
+}
+
+h3 {
+    font-size: 12px;
+}
+
+/* Retro window panels */
+
+form,
+.result {
+    background: var(--paper);
+    padding: 25px;
+    border: 3px solid var(--border);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    background: white;
-    padding: 24px;
-    border-radius: 12px;
+    gap: 14px;
 }
 
-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
+/* Inputs */
 
-button {
-    background-color: #3157c9;
-    color: white;
-    border: none;
+input,
+select,
+textarea {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
     padding: 12px;
-    border-radius: 6px;
+    border: 2px solid #b8a1d3;
+    border-radius: 2px;
+    background: #ffffff;
+    color: var(--text);
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--purple-dark);
+    box-shadow: 3px 3px 0 #e1d2f4;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--purple-dark);
     cursor: pointer;
 }
 
+/* Pixel buttons */
+
+button,
+.export-button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    line-height: 1.7;
+    background: var(--purple);
+    color: white;
+    padding: 14px 18px;
+    border: 3px solid var(--border);
+    border-radius: 2px;
+    box-shadow: 4px 4px 0 var(--border);
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s,
+        background 0.15s;
+}
+
+button:hover,
+.export-button:hover {
+    background: var(--purple-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--border);
+    color: white;
+}
+
+button:active,
+.export-button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--border);
+}
+
+/* Result card */
+
 .result {
-    background-color: white;
-    padding: 24px;
-    border-radius: 12px;
-    margin-top: 20px;
-    border-left: 5px solid #3157c9;
+    background: #f0fff8;
+    border-color: #7fae9a;
+    animation: resultAppear 0.5s ease-out;
 }
 
 .result h3 {
-    color: #198754;
-    font-size: 24px;
+    color: #338368;
+    font-size: 16px;
 }
+
+/* Inventory table */
 
 table {
     width: 100%;
-    border-collapse: collapse;
-    background: white;
-    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--paper);
+    border: 3px solid var(--border);
+    box-shadow: var(--shadow);
+    margin: 25px 0;
 }
 
 th,
 td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+    padding: 14px;
     text-align: left;
+    border-bottom: 2px solid #e9dff2;
 }
 
 th {
-    background-color: #3157c9;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    background: var(--purple-dark);
     color: white;
+    line-height: 1.8;
 }
 
-a {
-    display: inline-block;
-    margin: 10px 0;
-    color: #3157c9;
-    text-decoration: none;
+td {
+    font-size: 14px;
 }
+
+tr:hover td {
+    background: #f4eaff;
+}
+
+/* Links */
+
+a {
+    color: #7650ae;
+    text-decoration: none;
+    font-weight: 800;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #a45a9b;
+    text-decoration: underline;
+}
+
+/* Product thumbnails */
 
 .product-image {
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 8px;
+    border: 3px solid var(--border);
+    border-radius: 2px;
+    image-rendering: auto;
+    transition: transform 0.25s ease;
 }
+
+.product-image:hover {
+    transform: scale(1.1) rotate(-2deg);
+}
+
+/* Export button */
 
 .export-button {
     display: inline-block;
-    padding: 12px 20px;
-    background-color: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    background: #72b9a0;
+    margin: 12px 0 22px;
 }
 
 .export-button:hover {
-    background-color: #1d4ed8;
+    background: #4a927a;
+    text-decoration: none;
+}
+
+/* Delete buttons */
+
+.delete-button,
+.delete-all-button {
+    background: #e58da7;
+    border-color: #96566f;
+    box-shadow: 4px 4px 0 #96566f;
+}
+
+.delete-button:hover,
+.delete-all-button:hover {
+    background: #c86687;
+    box-shadow: 6px 6px 0 #96566f;
+}
+
+.inventory-actions {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+/* Prevent action forms from looking like huge cards */
+
+.inventory-actions form,
+td form,
+#selected-delete-form {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* Animation */
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes resultAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive layout */
+
+@media (max-width: 700px) {
+    body {
+        margin: 10px auto;
+        padding: 14px;
+    }
+
+    form,
+    .result {
+        padding: 16px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 10px;
+    }
+
+    button {
+        font-size: 9px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Background covering the entire browser window */
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    object-fit: cover;
+    image-rendering: pixelated;
+
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Make the page background transparent */
+body {
+    background: transparent;
+}
+
+/* Animated bear floating near the bottom of the screen */
+.pixel-sprite {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+
+    width: 100px;
+    height: auto;
+
+    image-rendering: pixelated;
+    z-index: 5;
+    pointer-events: none;
 }

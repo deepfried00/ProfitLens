@@ -9,15 +9,24 @@
 </head>
 
 <body>
+    <img id="animatedBackground" class="animated-background"
+        src="{{ url_for('static', filename='uploads/bg/Pixel-Art Background 1/frame0000.png') }}" alt=""
+        aria-hidden="true">
+
+    <!-- Animated bear -->
+    <img id="animatedBear" class="pixel-sprite" src="{{ url_for('static', filename='uploads/char2/Bear/Bear_1.png') }}"
+        alt="Animated pixel bear">
+
     <h1>My Inventory</h1>
 
-<a href="{{ url_for('export') }}"
-   class="export-button">
-    Export to Excel
-</a>
+    <a href="{{ url_for('export') }}" class="export-button">
+        Export to Excel
+    </a>
 
     <a href="/">Back to Calculator</a>
-
+    <form id="selected-delete-form" action="{{ url_for('delete_selected') }}" method="POST"
+        onsubmit="return confirm('Delete all selected products?');">
+    </form>
     <table>
         <tr>
             <th>ID</th>
@@ -26,12 +35,18 @@
             <th>Selling Price</th>
             <th>Profit</th>
             <th>Image</th>
+            <th>
+                <input type="checkbox" id="select-all" onclick="toggleAll(this)">
+            </th>
         </tr>
 
         {% for product in products %}
         <tr>
             <td>{{ product[0] }}</td>
-
+            <td>
+                <input type="checkbox" name="selected_products" value="{{ product[0] }}" form="selected-delete-form"
+                    class="product-checkbox">
+            </td>
             <td>
                 <a href="{{ product[1] }}" target="_blank" rel="noopener noreferrer">
                     View Product
@@ -44,7 +59,7 @@
             <td>
                 {% if product[5] %}
                 <img src="{{ url_for('static',
-                                    filename= 'uploads/' ~ product[5]) }}" alt="Product image" clas="product-image">
+                                    filename= 'uploads/' ~ product[5]) }}" alt="Product image" class="product-image">
                 {% else %}
                 No image
                 {% endif %}
@@ -52,6 +67,92 @@
         </tr>
         {% endfor %}
     </table>
+    <div class="inventory-actions">
+
+        <button type="submit" form="selected-delete-form" class="delete-button">
+            Delete Selected
+        </button>
+
+        <form action="{{ url_for('delete_all') }}" method="POST"
+            onsubmit="return confirm('WARNING: This will permanently delete ALL products. Continue?');">
+
+            <button type="submit" class="delete-all-button">
+                Delete All
+            </button>
+
+        </form>
+
+    </div>
+    <script>
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll(".product-checkbox");
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = source.checked;
+            });
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const background = document.getElementById("animatedBackground");
+            const bear = document.getElementById("animatedBear");
+
+            const backgroundFolder = {{ url_for('static', filename = 'uploads/bg/Pixel-Art Background 1/') | tojson
+        }};
+        const bearFolder = {{ url_for('static', filename = 'uploads/char2/Bear/') | tojson }};
+
+        const totalBackgroundFrames = 141;
+
+        let backgroundFrame = 0;
+        let bearFrame = 1;
+
+        const backgroundImages = [];
+
+        for (let i = 0; i < totalBackgroundFrames; i++) {
+            const frameName = `frame${String(i).padStart(4, "0")}.png`;
+
+            const img = new Image();
+            img.src = backgroundFolder + frameName;
+
+            backgroundImages.push(img);
+        }
+
+        const bearImages = [];
+
+        for (let i = 1; i <= 3; i++) {
+            const img = new Image();
+            img.src = bearFolder + `Bear_${i}.png`;
+
+            bearImages.push(img);
+        }
+
+        // Background animation: 12 FPS
+        setInterval(function () {
+            backgroundFrame = (backgroundFrame + 1) % totalBackgroundFrames;
+
+            const nextImage = backgroundImages[backgroundFrame];
+
+            if (nextImage.complete && nextImage.naturalWidth > 0) {
+                background.src = nextImage.src;
+            }
+        }, 1000 / 12);
+
+        // Bear animation: 4 FPS
+        setInterval(function () {
+            bearFrame = (bearFrame % 3) + 1;
+
+            const nextImage = bearImages[bearFrame - 1];
+
+            if (nextImage.complete && nextImage.naturalWidth > 0) {
+                bear.src = nextImage.src;
+            }
+        }, 1000 / 4);
+
+});
+    </script>
+
 </body>
 
 </html>

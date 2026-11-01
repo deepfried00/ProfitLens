@@ -5,6 +5,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
 from io import BytesIO
 from flask import send_file
+from flask import redirect,request
 
 from PIL import Image, UnidentifiedImageError
 from pathlib import Path
@@ -152,7 +153,34 @@ def inventory():
     connection.close()
     return render_template("inventory.html", products=products)
 
+@app.route("/delete-selected", methods=["POST"])
+def delete_selected():
+    selected_ids = request.form.getlist("selected_products")
 
+    if selected_ids:
+        connection = sqlite3.connect("profitlens.db")
+
+        connection.executemany(
+            "DELETE FROM products WHERE id = ?",
+            [(int(product_id),) for product_id in selected_ids]
+        )
+
+        connection.commit()
+        connection.close()
+
+    return redirect("/inventory")
+
+
+@app.route("/delete-all", methods=["POST"])
+def delete_all():
+    connection = sqlite3.connect("profitlens.db")
+
+    connection.execute("DELETE FROM products")
+
+    connection.commit()
+    connection.close()
+
+    return redirect("/inventory")
 
 @app.route("/compare", methods=["POST"])
 def compare():

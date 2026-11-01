@@ -1,13 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Supplier Comparison - ProfitLens</title>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
+    <!-- Compare page animated background -->
+    <img id="compareBackground" class="animated-background"
+        src="{{ url_for('static', filename='uploads/bg2/Pixel-Art Background 2/frame0000.png') }}" alt=""
+        aria-hidden="true">
+
+    <!-- Compare page animated character -->
+    <img id="compareSprite" class="pixel-sprite" src="{{ url_for('static', filename='uploads/ch1/Bee/Bee_1.png') }}"
+        alt="Animated character">
 
     <h1>Supplier Comparison Results</h1>
 
@@ -27,9 +35,7 @@
             <td>${{ supplier.shipping }}</td>
             <td>${{ supplier.total }}</td>
             <td>
-                <a href="{{ supplier.link }}"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a href="{{ supplier.link }}" target="_blank" rel="noopener noreferrer">
                     View Product
                 </a>
             </td>
@@ -45,39 +51,85 @@
     </p>
 
     <p>
-        <a href="{{ cheapest.link }}"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a href="{{ cheapest.link }}" target="_blank" rel="noopener noreferrer">
             Open Cheapest Product
         </a>
     </p>
 
-<form action="/" method="GET">
+    <form action="/" method="GET">
 
-    <input
-        type="hidden"
-        name="price"
-        value="{{ cheapest.price }}"
-    >
-    <input
-    type="hidden"
-    name="supplier_link"
-    value="{{ cheapest.link }}"
->
+        <input type="hidden" name="price" value="{{ cheapest.price }}">
+        <input type="hidden" name="supplier_link" value="{{ cheapest.link }}">
 
-    <input
-        type="hidden"
-        name="supplier_shipping"
-        value="{{ cheapest.shipping }}"
-    >
+        <input type="hidden" name="supplier_shipping" value="{{ cheapest.shipping }}">
 
-    <button type="submit">
-        Calculate Selling Price
-    </button>
+        <button type="submit">
+            Calculate Selling Price
+        </button>
 
-</form>
+    </form>
 
     <a href="/">Back to Homepage</a>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const background = document.getElementById("compareBackground");
+            const sprite = document.getElementById("compareSprite");
+
+            const backgroundFolder = {{ url_for('static', filename = 'uploads/bg2/Pixel-Art Background 2/') | tojson
+        }};
+        const spriteFolder = {{ url_for('static', filename = 'uploads/ch1/Bee/') | tojson }};
+
+        // Change these to match your new files
+        const totalBackgroundFrames = 30;
+        const totalSpriteFrames = 3;
+
+        let backgroundFrame = 0;
+        let spriteFrame = 0;
+
+        const backgroundImages = [];
+        const spriteImages = [];
+
+        // Load background frames
+        for (let i = 0; i < totalBackgroundFrames; i++) {
+            const img = new Image();
+            img.src = backgroundFolder + `frame${String(i).padStart(4, "0")}.png`;
+            backgroundImages.push(img);
+        }
+
+        // Load character frames
+        for (let i = 1; i <= totalSpriteFrames; i++) {
+            const img = new Image();
+            img.src = spriteFolder + `Bee_${i}.png`;
+            spriteImages.push(img);
+        }
+
+        // Animate background
+        setInterval(function () {
+            backgroundFrame = (backgroundFrame + 1) % totalBackgroundFrames;
+
+            const frame = backgroundImages[backgroundFrame];
+
+            if (frame.complete && frame.naturalWidth > 0) {
+                background.src = frame.src;
+            }
+        }, 1000 / 12);
+
+        // Animate character
+        setInterval(function () {
+            spriteFrame = (spriteFrame + 1) % totalSpriteFrames;
+
+            const frame = spriteImages[spriteFrame];
+
+            if (frame.complete && frame.naturalWidth > 0) {
+                sprite.src = frame.src;
+            }
+        }, 1000 / 4);
+
+});
+    </script>
+
 </body>
+
 </html>
