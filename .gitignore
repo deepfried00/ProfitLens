@@ -6,5 +6,5 @@ __pycache__/
 profitlens.db
 instance/
 .vscode/
-static/uploads/*
+
 !static/uploads/.gitkeep
